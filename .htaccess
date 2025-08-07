@@ -12,4 +12,4 @@ RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
 # Otherwise, route to index.php
-# RewriteRule ^ index.php [QSA,L]
+RewriteRule ^ index.php [QSA,L]
