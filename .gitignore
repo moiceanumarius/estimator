@@ -28,6 +28,11 @@ logs/
 # Session files (for development)
 /session/*.json
 
+# SSL certificates (for security)
+/ssl/*.key
+/ssl/*.crt
+/ssl/*.csr
+
 # Temporary files
 *.tmp
 *.temp

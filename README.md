@@ -1,6 +1,6 @@
 # Estimator – PHP Docker MVC App
 
-This is an estimation application (planning poker) with JavaScript frontend and PHP backend (MVC architecture), running in Docker.
+This is an estimation application (planning poker) with JavaScript frontend and PHP backend (MVC architecture), running in Docker with SSL support.
 
 ---
 
@@ -16,8 +16,9 @@ This is an estimation application (planning poker) with JavaScript frontend and 
 - **css/** – Custom styles (Bootstrap 5 + Flatly theme)
 - **session/** – JSON files for persisting users and votes per room
 - **tests/unit/** – PHPUnit unit tests for models
-- **Makefile** – Quick commands for development (docker up/down, tests)
-- **docker-compose.yml, Dockerfile** – Docker infrastructure
+- **ssl/** – SSL certificates (generated automatically)
+- **Makefile** – Quick commands for development (docker up/down, tests, SSL)
+- **docker-compose.yml, Dockerfile** – Docker infrastructure with SSL support
 - **composer.json** – Autoload and PHP dependencies (including PHPUnit)
 - **phpunit.xml** – Configuration for running unit tests
 
@@ -25,12 +26,44 @@ This is an estimation application (planning poker) with JavaScript frontend and 
 
 ## 🚀 Quick Start
 
-1. **Build & start Docker:**
-   ```sh
-   make up
-   ```
-2. **Access the application:**
-   - [http://localhost:8080](http://localhost:8080)
+### Option 1: HTTP Only (Port 80)
+```sh
+make up
+```
+Access: [http://localhost](http://localhost)
+
+### Option 2: HTTPS with SSL (Port 80 + 443)
+```sh
+make setup-ssl
+```
+Access: [https://localhost](https://localhost) (auto-redirects from HTTP)
+
+---
+
+## 🔒 SSL Setup
+
+The application supports both HTTP and HTTPS:
+
+### Generate SSL Certificates
+```sh
+make ssl
+```
+
+### Start with SSL
+```sh
+make setup-ssl
+```
+
+### Manual SSL Setup
+```sh
+# Generate certificates
+./generate-ssl.sh
+
+# Start application
+docker-compose up -d
+```
+
+**Note**: Self-signed certificates are used for development. For production, use certificates from a trusted CA.
 
 ---
 
@@ -42,6 +75,7 @@ This is an estimation application (planning poker) with JavaScript frontend and 
 - **Live Updates** – 2-second polling for user/vote synchronization.
 - **Logout** – Any user can log out, session is cleared.
 - **Modern UI** – Bootstrap 5, Flatly theme, Bootstrap Icons.
+- **SSL Support** – Secure HTTPS connections with automatic HTTP to HTTPS redirect.
 
 ---
 
@@ -61,9 +95,13 @@ This is an estimation application (planning poker) with JavaScript frontend and 
 
 ## 🛠️ Useful Commands (Makefile)
 
-- `make up` – starts Docker containers
+- `make up` – starts Docker containers (HTTP only)
 - `make down` – stops Docker containers
+- `make ssl` – generates SSL certificates
+- `make setup-ssl` – generates SSL certificates and starts containers
 - `make unit-tests` – runs unit tests
+- `make logs` – view application logs
+- `make rebuild` – rebuild containers from scratch
 
 ---
 
@@ -76,6 +114,15 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^ index.php [QSA,L]
 ```
+
+---
+
+## 🔐 Security Features
+
+- **SSL/TLS Support** – Encrypted HTTPS connections
+- **Security Headers** – HSTS, X-Frame-Options, X-Content-Type-Options
+- **Automatic Redirect** – HTTP to HTTPS redirect
+- **Session Security** – Secure session handling
 
 ---
 

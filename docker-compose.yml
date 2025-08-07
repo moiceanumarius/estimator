@@ -2,6 +2,8 @@ services:
   web:
     build: .
     ports:
-      - "8080:80"
+      - "80:80"
+      - "443:443"
     volumes:
       - .:/var/www/html
+      - ./ssl:/etc/apache2/ssl
