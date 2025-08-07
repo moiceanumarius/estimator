@@ -10,7 +10,23 @@
 
 ## Installation Steps
 
-### 1. Clone the Repository
+### 1. Install Composer (if not already installed)
+
+```bash
+# Download Composer installer
+curl -sS https://getcomposer.org/installer | php
+
+# Move to global location
+sudo mv composer.phar /usr/local/bin/composer
+
+# Make it executable
+sudo chmod +x /usr/local/bin/composer
+
+# Verify installation
+composer --version
+```
+
+### 2. Clone the Repository
 
 ```bash
 cd /var/www
@@ -18,14 +34,20 @@ git clone https://github.com/moiceanumarius/estimator.git
 cd estimator
 ```
 
-### 2. Run Setup Script
+### 3. Run Setup Script
 
 ```bash
 chmod +x setup-production.sh
 ./setup-production.sh
 ```
 
-### 3. Configure Apache
+**Note**: The setup script will automatically:
+- Install Composer dependencies
+- Generate autoload files
+- Set proper permissions
+- Verify the installation
+
+### 4. Configure Apache
 
 #### Option A: Using the provided config file
 
@@ -67,7 +89,7 @@ Add this to your Apache virtual host configuration:
 </VirtualHost>
 ```
 
-### 4. Set Permissions
+### 5. Set Permissions
 
 ```bash
 sudo chown -R www-data:www-data /var/www/estimator
@@ -75,7 +97,7 @@ sudo chmod -R 755 /var/www/estimator
 sudo chmod -R 777 /var/www/estimator/session
 ```
 
-### 5. Test the Application
+### 6. Test the Application
 
 Visit your domain in a browser. You should see the Estimator login page.
 
@@ -83,10 +105,21 @@ Visit your domain in a browser. You should see the Estimator login page.
 
 ### Common Issues
 
-1. **Autoloader not found**: Make sure you ran `composer install`
-2. **Permission denied**: Check file permissions with `ls -la /var/www/estimator`
+1. **Autoloader not found**: 
+   ```bash
+   cd /var/www/estimator
+   composer install --no-dev --optimize-autoloader
+   ```
+
+2. **Permission denied**: 
+   ```bash
+   sudo chown -R www-data:www-data /var/www/estimator
+   sudo chmod -R 755 /var/www/estimator
+   ```
+
 3. **Apache 404**: Verify DocumentRoot in Apache configuration
 4. **Session errors**: Ensure session directory is writable
+5. **Composer not found**: Install Composer using the steps above
 
 ### Check Logs
 
@@ -110,6 +143,12 @@ composer --version
 # Check Apache modules
 apache2ctl -M | grep rewrite
 apache2ctl -M | grep php
+
+# Check if autoloader exists
+ls -la /var/www/estimator/vendor/autoload.php
+
+# Test PHP syntax
+php -l /var/www/estimator/index.php
 ```
 
 ## Security Considerations
