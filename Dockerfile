@@ -18,7 +18,7 @@ RUN apt-get update && apt-get install -y \
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Copy project files to the Apache document root
-COPY . /var/www/html/
+COPY . /var/www/estimator/
 
 # Expose port 80
 EXPOSE 80
