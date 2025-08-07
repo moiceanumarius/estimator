@@ -11,9 +11,9 @@ mkdir -p ssl
 echo "Generating private key..."
 openssl genrsa -out ssl/estimator.key 2048
 
-# Generate certificate signing request
-echo "Generating certificate signing request..."
-openssl req -new -key ssl/estimator.key -out ssl/estimator.csr -subj "/C=RO/ST=Bucharest/L=Bucharest/O=Estimator/OU=IT/CN=localhost"
+# Generate certificate signing request for www.estimatorapp.site
+echo "Generating certificate signing request for www.estimatorapp.site..."
+openssl req -new -key ssl/estimator.key -out ssl/estimator.csr -subj "/C=RO/ST=Bucharest/L=Bucharest/O=Estimator/OU=IT/CN=www.estimatorapp.site"
 
 # Generate self-signed certificate
 echo "Generating self-signed certificate..."
@@ -28,6 +28,11 @@ echo "Files created:"
 echo "  - ssl/estimator.key (private key)"
 echo "  - ssl/estimator.crt (certificate)"
 echo "  - ssl/estimator.csr (certificate signing request)"
+echo ""
+echo "Certificate details:"
+echo "  - Domain: www.estimatorapp.site"
+echo "  - Valid for: 365 days"
+echo "  - Type: Self-signed (development)"
 echo ""
 echo "Note: This is a self-signed certificate for development."
 echo "For production, use a certificate from a trusted CA."

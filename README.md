@@ -30,13 +30,13 @@ This is an estimation application (planning poker) with JavaScript frontend and 
 ```sh
 make up
 ```
-Access: [http://localhost](http://localhost)
+Access: [http://www.estimatorapp.site](http://www.estimatorapp.site)
 
 ### Option 2: HTTPS with SSL (Port 80 + 443)
 ```sh
 make setup-ssl
 ```
-Access: [https://localhost](https://localhost) (auto-redirects from HTTP)
+Access: [https://www.estimatorapp.site](https://www.estimatorapp.site) (auto-redirects from HTTP)
 
 ---
 

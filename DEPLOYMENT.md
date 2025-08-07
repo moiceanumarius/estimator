@@ -78,7 +78,7 @@ Add this to your Apache virtual host configuration:
 
 ```apache
 <VirtualHost *:80>
-    ServerName your-domain.com
+    ServerName www.estimatorapp.site
     DocumentRoot /var/www/estimator
     
     <Directory /var/www/estimator>
@@ -99,7 +99,7 @@ sudo chmod -R 777 /var/www/estimator/session
 
 ### 6. Test the Application
 
-Visit your domain in a browser. You should see the Estimator login page.
+Visit https://www.estimatorapp.site in a browser. You should see the Estimator login page.
 
 ## Troubleshooting
 
