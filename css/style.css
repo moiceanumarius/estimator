@@ -1,0 +1,147 @@
+/* Global styles */
+body {
+    font-family: Arial, sans-serif;
+}
+
+/* Navbar styles */
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.app-logo {
+    width: 32px;
+    height: 32px;
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: bold;
+    font-size: 16px;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.app-logo:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.8);
+    color: white;
+    transform: scale(1.05);
+}
+
+#invite-btn {
+    display: none;
+    position: relative;
+    left: -70px;
+}
+
+/* User sidebar styles */
+.user-sidebar {
+    margin-top: -1.5rem;
+}
+
+.user-sidebar .sticky-header {
+    z-index: 2;
+}
+
+.user-list-container {
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+/* Fibonacci buttons styles */
+.fib-buttons-container {
+    max-width: 900px;
+}
+
+.fib-button {
+    min-width: 90px;
+    font-size: 2rem;
+    padding: 1.2rem 2.2rem;
+    transition: transform 0.1s, background 0.15s;
+}
+
+.fib-button:hover {
+    transform: scale(1.08);
+}
+
+.fib-button.selected {
+    transform: scale(1.08);
+}
+
+/* Flip section styles */
+#flip-section {
+    display: none;
+}
+
+.reset-btn {
+    display: none;
+}
+
+/* Modal styles */
+.modal-content {
+    border-radius: 0.5rem;
+}
+
+/* Login page styles */
+.login-container {
+    min-height: 100vh;
+}
+
+.login-card {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+#roomForm, #loginForm {
+    display: none;
+}
+
+#roomForm.show, #loginForm.show {
+    display: block;
+}
+
+/* User row styles */
+.user-row {
+    position: relative;
+}
+
+.user-remove-btn {
+    opacity: 0;
+    transition: opacity 0.2s;
+    padding: 2px 6px;
+    font-size: 12px;
+    border-radius: 4px;
+}
+
+.user-row:hover .user-remove-btn {
+    opacity: 1;
+}
+
+/* Voting stats styles */
+.voting-stats {
+    display: none;
+}
+
+.stats-progress-bar {
+    height: 8px;
+}
+
+/* Utility classes */
+.min-height-0 {
+    min-height: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .fib-button {
+        min-width: 70px;
+        font-size: 1.5rem;
+        padding: 1rem 1.5rem;
+    }
+}
