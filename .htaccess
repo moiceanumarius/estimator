@@ -1,4 +1,15 @@
 RewriteEngine On
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^ index.php [QSA,L]
+
+# Serve static files directly
+RewriteRule \.(css|js|png|jpg|jpeg|gif|ico|svg|txt)$ - [L]
+
+# If the file exists, serve it directly
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
+
+# If the directory exists, serve it directly  
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Otherwise, route to index.php
+# RewriteRule ^ index.php [QSA,L]
