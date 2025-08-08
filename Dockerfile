@@ -27,6 +27,8 @@ RUN a2enmod ssl
 RUN a2enmod headers
 RUN a2enmod rewrite
 RUN a2enmod mime
+# Enable proxy modules for WSS reverse proxy
+RUN a2enmod proxy proxy_http proxy_wstunnel
 
 # Allow .htaccess overrides
 RUN sed -i 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf
