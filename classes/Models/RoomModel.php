@@ -74,7 +74,7 @@ class RoomModel extends Model
         $this->saveUsers();
     }
     
-    public function updateUserVoteById(string $id, ?int $vote): void
+    public function updateUserVoteById(string $id, int|string|null $vote): void
     {
         foreach ($this->users as $key => $user) {
             if ($user['id'] === $id) {
@@ -138,7 +138,7 @@ class RoomModel extends Model
         $this->saveUsers();
     }
     
-    public function updateUserVote(string $name, ?int $vote): void
+    public function updateUserVote(string $name, int|string|null $vote): void
     {
         foreach ($this->users as $key => $user) {
             if ($user['name'] === $name) {
