@@ -431,7 +431,14 @@ async function selectFib(num) {
         
         selectedVote = num;
         renderFibButtons(selectedVote); // Update immediately for better UX
-        // fetchVotesAndUsers will update again on next poll
+        
+        // Update the user's vote in the local users array for immediate feedback
+        const me = users.find(u => u.id === currentUser.id);
+        if (me) {
+            me.vote = num;
+            me.hasVoted = true;
+            renderUsers(); // Update user list immediately
+        }
     } catch (error) {
         console.error('Error selecting Fibonacci number:', error);
     }
@@ -446,7 +453,7 @@ function setupFlipButton() {
         flipSection.style.display = 'flex';
         
         const updateFlipReset = () => {
-            // Disable flip if nimeni nu a votat
+            // Disable flip if no one has voted
             const anyVote = users.some(u => u.hasVoted);
             flipBtn.disabled = !anyVote;
             if (votesRevealed) {
@@ -467,6 +474,8 @@ function setupFlipButton() {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ room: roomId })
                 });
+                votesRevealed = true;
+                updateFlipReset();
                 fetchVotesAndUsers();
             } catch (error) {
                 console.error('Error flipping votes:', error);
@@ -480,16 +489,13 @@ function setupFlipButton() {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ room: roomId })
                 });
+                votesRevealed = false;
+                updateFlipReset();
                 fetchVotesAndUsers();
             } catch (error) {
                 console.error('Error resetting votes:', error);
             }
         };
-        
-        if (!flipSection._intervalSet) {
-            setInterval(updateFlipReset, 500);
-            flipSection._intervalSet = true;
-        }
     } else {
         flipSection.style.display = 'none';
         if (flipBtn) flipBtn.style.display = 'none';
