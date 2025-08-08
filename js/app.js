@@ -212,18 +212,20 @@ function connectWebSocket() {
         return;
     }
     
-    // Development: use WS (no SSL)
     const host = window.location.hostname;
-    const protocol = 'ws:'; // Force WS for development
-    
-    const wsUrl = `${protocol}//${host}:8080?room=${encodeURIComponent(roomId)}&user=${encodeURIComponent(currentUser.name)}`;
+    const isHttps = window.location.protocol === 'https:';
+    const protocol = isHttps ? 'wss:' : 'ws:';
+    const wsPath = isHttps ? '/ws' : `:8080`;
+    const wsUrl = isHttps
+        ? `${protocol}//${host}${wsPath}?room=${encodeURIComponent(roomId)}&user=${encodeURIComponent(currentUser.name)}`
+        : `${protocol}//${host}${wsPath}?room=${encodeURIComponent(roomId)}&user=${encodeURIComponent(currentUser.name)}`;
     
     console.log('Attempting to connect to WebSocket:', wsUrl);
     console.log('roomId:', roomId);
     console.log('currentUser:', currentUser);
     console.log('host:', host);
     console.log('protocol:', protocol);
-    console.log('Using WS protocol for development');
+    console.log('Using protocol:', protocol, 'path:', wsPath);
     
     try {
         websocket = new WebSocket(wsUrl);
