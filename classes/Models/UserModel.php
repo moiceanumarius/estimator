@@ -9,7 +9,7 @@ class UserModel extends Model
     public string $id;
     public string $name;
     public bool $isAdmin;
-    public ?int $vote;
+    public int|string|null $vote;
     
     public function __construct(string $name, bool $isAdmin = false, ?string $id = null)
     {
@@ -34,12 +34,12 @@ class UserModel extends Model
         return $this->isAdmin;
     }
     
-    public function getVote(): ?int
+    public function getVote(): int|string|null
     {
         return $this->vote;
     }
     
-    public function setVote(?int $vote): void
+    public function setVote(int|string|null $vote): void
     {
         $this->vote = $vote;
     }
@@ -73,7 +73,8 @@ class UserModel extends Model
     public static function fromArray(array $arr): self
     {
         $user = new self($arr['name'], $arr['isAdmin'] ?? false, $arr['id'] ?? null);
-        $user->vote = $arr['vote'] ?? null;
+        // Normalize vote to allow int or string (e.g., '☕')
+        $user->vote = array_key_exists('vote', $arr) ? $arr['vote'] : null;
         return $user;
     }
 }
