@@ -37,8 +37,7 @@ body {
 
 #invite-btn {
     display: none;
-    position: relative;
-    left: -70px;
+    position: static;
 }
 
 /* User sidebar styles */
@@ -50,8 +49,9 @@ body {
     z-index: 2;
 }
 
+/* Users list */
 .user-list-container {
-    max-height: 600px;
+    max-height: calc(100vh - 200px);
     overflow-y: auto;
 }
 
@@ -109,12 +109,16 @@ body {
 /* User row styles */
 .user-row {
     position: relative;
+    height: 40px;
 }
+
+/* Make user name look clickable when actions are available */
+.user-row .fw-semibold.clickable { cursor: pointer; text-decoration: underline dotted; }
 
 .user-remove-btn {
     opacity: 0;
     transition: opacity 0.2s;
-    padding: 2px 6px;
+    padding: 4px 8px;
     font-size: 12px;
     border-radius: 4px;
 }
@@ -137,11 +141,90 @@ body {
     min-height: 0;
 }
 
-/* Responsive adjustments */
+/* Responsive adjustments: MOBILE ONLY */
 @media (max-width: 768px) {
+    /* Move current user display under logo, keep Logout on the right */
+    .navbar .container-fluid { flex-wrap: wrap; }
+    #current-user-display { display: none !important; }
+    #logout-link {
+        order: 2;
+        margin-left: auto !important;
+    }
+
+    /* Mobile: show only icon for Set admin button */
+    .user-promote-btn { padding: 2px 6px; min-width: auto; }
+    .user-promote-btn .btn-label { display: none; }
+    .user-promote-btn i { font-size: 1rem; margin: 0; }
+    /* Sidebar spacing and users list behavior on mobile */
+    .user-sidebar { margin-top: 0; }
+    .user-list-container { 
+        max-height: 40vh; 
+        overflow-y: auto; 
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Reduce overall container height on mobile */
+    .container-fluid.min-vh-100 { min-height: auto !important; }
+    .user-sidebar.min-vh-100 { min-height: auto !important; }
+
+    /* Show admin/user badge in navbar header on mobile */
+    #current-user-type { display: inline-block !important; }
+
+    /* Make voting area mobile friendly */
+    .fib-buttons-container {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fit, minmax(72px, 1fr));
+        gap: 0.5rem;
+        max-width: 100%;
+        padding: 0 0.5rem;
+        margin-top: 1rem;
+    }
     .fib-button {
-        min-width: 70px;
-        font-size: 1.5rem;
-        padding: 1rem 1.5rem;
+        min-width: auto;
+        font-size: 1.25rem;
+        padding: 0.9rem 0.9rem;
+        margin: 0 !important;
+    }
+    #flip-section {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5rem !important;
+    }
+    #flip-section .btn {
+        padding: 0.75rem 1.25rem;
+        width: 100%;
+        max-width: 260px;
+    }
+    /* Avoid navbar overflow on small screens */
+    #invite-btn { left: 0; }
+}
+
+@media (max-width: 400px) {
+    .fib-buttons-container {
+        grid-template-columns: repeat(auto-fit, minmax(64px, 1fr));
+        gap: 0.4rem;
+    }
+    .fib-button {
+        font-size: 1.1rem;
+        padding: 0.7rem 0.7rem;
     }
 }
+  
+  /* Brand button color to match logo (#375a7f) using Bootstrap button variables */
+  .btn-brand {
+      --bs-btn-color: #ffffff;
+      --bs-btn-bg: #375a7f;
+      --bs-btn-border-color: #375a7f;
+      --bs-btn-hover-color: #ffffff;
+      --bs-btn-hover-bg: #2f4f6d;
+      --bs-btn-hover-border-color: #2f4f6d;
+      --bs-btn-focus-shadow-rgb: 55, 90, 127;
+      --bs-btn-active-color: #ffffff;
+      --bs-btn-active-bg: #2b485f;
+      --bs-btn-active-border-color: #2b485f;
+      --bs-btn-disabled-color: #ffffff;
+      --bs-btn-disabled-bg: #375a7f;
+      --bs-btn-disabled-border-color: #375a7f;
+  }
+
+  
