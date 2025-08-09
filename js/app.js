@@ -1059,6 +1059,10 @@ function openUserActionsModal(targetUser) {
 
 // Initialize application
 function initializeApp() {
+    // Show loading overlay early
+    const overlay = document.getElementById('loading-overlay');
+    if (overlay) overlay.classList.add('show');
+
     initializeUser().then(() => {
         fetchVotesAndUsers();
         
@@ -1103,6 +1107,14 @@ function initializeApp() {
                 }
             };
         }
+
+        // Hide overlay after first successful data render
+        const hideOverlayOnce = () => {
+            const ov = document.getElementById('loading-overlay');
+            if (ov) ov.classList.remove('show');
+        };
+        // Try to hide after first data fetch
+        setTimeout(hideOverlayOnce, 300);
     }).catch((error) => {
         // Handle errors from initializeUser (like redirects)
         if (error.message !== 'User not authenticated' && error.message !== 'User just logged out') {

@@ -227,4 +227,17 @@ body {
       --bs-btn-disabled-border-color: #375a7f;
   }
 
+  /* Loading overlay */
+  .loading-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(55, 90, 127, 0.85);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+  }
+  .loading-overlay.show { display: flex; }
+  .loading-content { transform: translateY(-10%); }
+
   
