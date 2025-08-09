@@ -540,7 +540,7 @@ function updateVotesAndUsers(data) {
     }
     if (currentUserTypeSpan) {
         if (currentUser.isAdmin) {
-            currentUserTypeSpan.innerHTML = '<span class="badge bg-warning text-dark ms-2"><i class="bi bi-award-fill"></i> admin</span>';
+            currentUserTypeSpan.innerHTML = '<span class="badge bg-warning text-white ms-2"><i class="bi bi-award-fill"></i> admin</span>';
         } else {
             currentUserTypeSpan.innerHTML = '<span class="badge bg-secondary ms-2">user</span>';
         }
@@ -692,7 +692,7 @@ async function fetchVotesAndUsers() {
         }
         if (currentUserTypeSpan) {
             if (currentUser.isAdmin) {
-                currentUserTypeSpan.innerHTML = '<span class="badge bg-warning text-dark ms-2"><i class="bi bi-award-fill"></i> admin</span>';
+                currentUserTypeSpan.innerHTML = '<span class="badge bg-warning text-white ms-2"><i class="bi bi-award-fill"></i> admin</span>';
             } else {
                 currentUserTypeSpan.innerHTML = '<span class="badge bg-secondary ms-2">user</span>';
             }
@@ -827,7 +827,7 @@ function renderUsers() {
         if (user.isAdmin) {
             const crown = document.createElement('span');
             crown.className = 'ms-2';
-            crown.innerHTML = '<span class="badge bg-warning text-dark"><i class="bi bi-award-fill"></i> admin</span>';
+            crown.innerHTML = '<span class="badge bg-warning text-white"><i class="bi bi-award-fill"></i> admin</span>';
             leftSide.appendChild(crown);
         } else {
             const badge = document.createElement('span');
@@ -836,99 +836,11 @@ function renderUsers() {
             leftSide.appendChild(badge);
         }
         
-        // Add "Set admin" button for admin (to promote other users)
-        if (currentUser.isAdmin && user.id !== currentUser.id && !user.isAdmin) {
-            const promoteBtn = document.createElement('button');
-            promoteBtn.className = 'btn btn-outline-warning btn-sm ms-2 user-promote-btn';
-            promoteBtn.innerHTML = '<i class="bi bi-arrow-up-circle"></i> Set admin';
-            promoteBtn.title = 'Promote user to admin';
-            promoteBtn.style.fontSize = '0.75rem';
-            promoteBtn.setAttribute('data-username', user.name);
-            
-            // Check if user was in hover state before update
-            const wasHovered = hoverStates.get(user.name);
-            promoteBtn.style.opacity = wasHovered ? '1' : '0';
-            
-            promoteBtn.onclick = async (e) => {
-                e.stopPropagation();
-                if (confirm(`Promote ${user.name} to admin? You will become a regular user.`)) {
-                    try {
-                        const response = await fetch('api.php?action=promote-user&room=' + encodeURIComponent(roomId), {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ 
-                                newAdminId: user.id, 
-                                currentAdminId: currentUser.id,
-                                room: roomId 
-                            })
-                        });
-                        if (response.ok) {
-                            // Refresh the page to get the latest settings
-                            window.location.reload();
-                        }
-                    } catch (error) {
-                        console.error('Error promoting user:', error);
-                    }
-                }
-            };
-            
-            leftSide.appendChild(promoteBtn);
-        }
-        
-        // Add remove button for admin
-        let removeBtn = null;
+        // Setup modal actions on user name (admin only, not for self)
         if (currentUser.isAdmin && user.id !== currentUser.id) {
-            removeBtn = document.createElement('button');
-            removeBtn.className = 'btn btn-outline-danger ms-2 user-remove-btn';
-            removeBtn.innerHTML = '<i class="bi bi-x"></i>';
-            removeBtn.title = 'Remove user from room';
-            removeBtn.setAttribute('data-username', user.name);
-            
-            // Check if user was in hover state before update
-            const wasHovered = hoverStates.get(user.name);
-            removeBtn.style.opacity = wasHovered ? '1' : '0';
-            
-            removeBtn.onclick = async (e) => {
-                e.stopPropagation();
-                if (confirm(`Remove ${user.name} from the room?`)) {
-                    try {
-                        const response = await fetch('api.php?action=logout&room=' + encodeURIComponent(roomId), {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ id: user.id, room: roomId })
-                        });
-                        if (response.ok) {
-                            // Notify others via WebSocket as well
-                            await sendWebSocketMessage({
-                                type: 'remove_user',
-                                payload: { userName: user.name, userId: user.id }
-                            });
-                            fetchVotesAndUsers();
-                        }
-                    } catch (err) {
-                        console.error('Error removing user:', err);
-                    }
-                }
-            };
-            
-            leftSide.appendChild(removeBtn);
-        }
-        
-        // Add hover event listeners if user has admin action buttons
-        if (currentUser.isAdmin && user.id !== currentUser.id) {
-            const promoteBtn = leftSide.querySelector('.user-promote-btn');
-            
-            row.onmouseenter = () => {
-                if (promoteBtn) promoteBtn.style.opacity = '1';
-                if (removeBtn) removeBtn.style.opacity = '1';
-                currentHoverStates.set(user.name, true);
-            };
-            
-            row.onmouseleave = () => {
-                if (promoteBtn) promoteBtn.style.opacity = '0';
-                if (removeBtn) removeBtn.style.opacity = '0';
-                currentHoverStates.set(user.name, false);
-            };
+            nameSpan.classList.add('clickable');
+            nameSpan.title = 'Click for actions';
+            nameSpan.onclick = () => openUserActionsModal(user);
         }
         
         row.appendChild(leftSide);
@@ -1078,6 +990,70 @@ function setupFlipButton() {
         flipSection.style.display = 'none';
         if (flipBtn) flipBtn.style.display = 'none';
         if (resetBtn) resetBtn.style.display = 'none';
+    }
+}
+
+// Open user actions modal and wire buttons
+function openUserActionsModal(targetUser) {
+    try {
+        const modalEl = document.getElementById('userActionsModal');
+        if (!modalEl) return;
+        const modal = new bootstrap.Modal(modalEl);
+        const selectedEl = document.getElementById('userActionsSelectedName');
+        if (selectedEl) selectedEl.textContent = targetUser.name;
+        
+        const promoteBtn = document.getElementById('actionsPromoteBtn');
+        const removeBtn = document.getElementById('actionsRemoveBtn');
+        
+        // Enable/disable promote depending on current role
+        if (promoteBtn) {
+            promoteBtn.disabled = !!targetUser.isAdmin;
+            promoteBtn.onclick = async () => {
+                try {
+                    const response = await fetch('api.php?action=promote-user&room=' + encodeURIComponent(roomId), {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ 
+                            newAdminId: targetUser.id, 
+                            currentAdminId: currentUser.id,
+                            room: roomId 
+                        })
+                    });
+                    if (response.ok) {
+                        modal.hide();
+                        window.location.reload();
+                    }
+                } catch (error) {
+                    console.error('Error promoting user:', error);
+                }
+            };
+        }
+        
+        if (removeBtn) {
+            removeBtn.onclick = async () => {
+                try {
+                    const response = await fetch('api.php?action=logout&room=' + encodeURIComponent(roomId), {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id: targetUser.id, room: roomId })
+                    });
+                    if (response.ok) {
+                        await sendWebSocketMessage({
+                            type: 'remove_user',
+                            payload: { userName: targetUser.name, userId: targetUser.id }
+                        });
+                        modal.hide();
+                        fetchVotesAndUsers();
+                    }
+                } catch (err) {
+                    console.error('Error removing user:', err);
+                }
+            };
+        }
+        
+        modal.show();
+    } catch (e) {
+        console.error('Failed to open user actions modal:', e);
     }
 }
 

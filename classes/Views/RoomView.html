@@ -17,17 +17,12 @@
                 <div class="app-logo">E</div>
                 Estimator
             </span>
-            <div class="d-flex align-items-center ms-auto">
-                <button id="invite-btn" class="btn btn-outline-light btn-sm me-3">
-                    <i class="bi bi-share me-1"></i>Share link
-                </button>
-                <span id="current-user-display" class="me-3 text-white">
-                    <i class="bi bi-person-circle me-1"></i>
-                    <span id="current-user-name"></span>
-                    <span id="current-user-type" class="ms-1"></span>
-                </span>
-                <a href="#" id="logout-link" class="btn btn-outline-light btn-sm">Logout</a>
-            </div>
+            <span id="current-user-display" class="text-white ms-auto me-3 d-flex align-items-center">
+                <i class="bi bi-person-circle me-1"></i>
+                <span id="current-user-name"></span>
+                <span id="current-user-type" class="ms-1"></span>
+            </span>
+            <a href="#" id="logout-link" class="btn btn-outline-light btn-sm">Logout</a>
         </div>
     </nav>
     <!-- Modal pentru invite link -->
@@ -50,12 +45,37 @@
             </div>
         </div>
     </div>
+    <!-- Modal pentru actiuni utilizator -->
+    <div class="modal fade" id="userActionsModal" tabindex="-1" aria-labelledby="userActionsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="userActionsModalLabel">User actions</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3"><span class="text-muted small">Selected:</span> <span id="userActionsSelectedName" class="fw-semibold"></span></div>
+                    <div class="d-grid gap-2">
+                        <button id="actionsPromoteBtn" class="btn btn-outline-warning">
+                            <i class="bi bi-arrow-up-circle me-1"></i>Set admin
+                        </button>
+                        <button id="actionsRemoveBtn" class="btn btn-outline-danger">
+                            <i class="bi bi-x me-1"></i>Remove user
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="container-fluid min-vh-100 d-flex flex-column">
         <div class="row flex-grow-1 min-height-0">
-            <div class="col-12 col-md-4 col-lg-3 p-0 d-flex flex-column min-vh-100 bg-white border-end shadow-sm user-sidebar">
+            <div class="col-12 col-md-4 col-lg-3 p-0 d-flex flex-column bg-white border-end shadow-sm user-sidebar">
                 <div class="d-flex flex-column h-100">
-                    <div class="p-3 border-bottom bg-white text-dark sticky-top sticky-header">
+                    <div class="p-3 border-bottom bg-white text-dark sticky-top sticky-header d-flex align-items-center justify-content-between">
                         <h5 class="mb-0">Users</h5>
+                        <button id="invite-btn" class="btn btn-brand btn-sm" style="display:none;">
+                            <i class="bi bi-share me-1"></i>Share link
+                        </button>
                     </div>
                     <div class="overflow-auto p-3 user-list-container" id="users"></div>
                     <div id="voting-stats" class="p-3 border-top voting-stats">
