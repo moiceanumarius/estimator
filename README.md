@@ -1,6 +1,6 @@
 # Estimator – PHP Docker MVC App
 
-This is an estimation application (planning poker) with JavaScript frontend and PHP backend (MVC architecture), running in Docker with SSL support and real-time WebSocket updates.
+This is an estimation application (planning poker) with JavaScript frontend and PHP backend (MVC architecture), running in Docker with SSL support and real-time WebSocket updates. The app is available at https://www.estimatorapp.site.
 
 ---
 
